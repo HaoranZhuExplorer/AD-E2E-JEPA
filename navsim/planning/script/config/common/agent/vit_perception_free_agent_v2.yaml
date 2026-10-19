@@ -1,0 +1,53 @@
+_target_: navsim.agents.vit_perception_free_agent_v2.vit_agent.ViTPerceptionFreeAgent
+_convert_: 'all'
+
+trajectory_sampling:
+    _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+    _convert_: 'all'
+    time_horizon: 4
+    interval_length: 0.5
+
+config:
+  _target_: navsim.agents.vit_perception_free_agent_v2.vit_config.ViTPerceptionFreeConfig
+  _convert_: 'all'
+
+  model:
+    img_size: [256, 512]
+    grid_size: [16, 32] # DINOv3 ViT-L/16 patch grid for the rectangular front-camera input.
+    projected_grid_size: [4, 8]
+    unfreeze_encoder: false
+    with_proj: true
+    unfreeze_projector: true
+    num_history_frames: 4 # num of frames as input
+    
+    visual_encoder:
+      enc_type: dino
+      enc_version: dinov3_vitl16
+      pretrained: true
+      pretrain_enc_path: null
+      pretrain_enc_ckpt_key: null
+      embed_dim: 1024
+      projector_checkpoint_path: null
+      projector_config:
+        norm_type: layer
+        conv_layers:
+          - kernel_size: 3
+            stride: 2
+            padding: 1
+            in_dim: 1024
+            out_dim: 1024
+          - kernel_size: 3
+            stride: 2
+            padding: 1
+            in_dim: 1024
+            out_dim: 256
+
+    trajectory_decoder:
+      d_model: 256
+      d_ffn: 1024
+      num_layers: 3
+      num_heads: 8
+      dropout: 0.0
+
+lr: 1e-4
+encoder_projector_lr: null

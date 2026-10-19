@@ -1,0 +1,13 @@
+from dataclasses import dataclass, field
+from typing import Tuple, Dict, Any, Optional
+
+import numpy as np
+from nuplan.common.actor_state.tracked_objects_types import TrackedObjectType
+from nuplan.common.maps.abstract_map import SemanticMapLayer
+
+@dataclass
+class LE_WMConfig:
+    """Global LE_WM config."""
+
+    # Model configuration extracted from hydra yaml
+    model: Dict[str, Any] = field(default_factory=dict)

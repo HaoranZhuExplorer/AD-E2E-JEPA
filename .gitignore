@@ -1,0 +1,18 @@
+wget-log
+log
+*.ext3
+*.out
+download
+navsim_experiments
+__pycache__
+*.pyc
+scripts/training/log/
+wandb
+.codex
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+

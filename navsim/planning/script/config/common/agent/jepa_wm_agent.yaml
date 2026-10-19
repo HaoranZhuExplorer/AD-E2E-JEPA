@@ -1,0 +1,104 @@
+_target_: navsim.agents.jepa_wm.jepa_wm_agent.JEPA_WMAgent
+_convert_: 'all'
+
+trajectory_sampling:
+    _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+    _convert_: 'all'
+    time_horizon: 4
+    interval_length: 0.5
+config:
+  _target_: navsim.agents.jepa_wm.jepa_wm_config.JEPA_WMConfig
+  _convert_: 'all'
+
+  # Vanilla upstream JEPA-WM: raw DINOv3 patches and prediction MSE only.
+  model:
+    img_size: [256, 512]
+    grid_size: [16, 32] # DINOv3 ViT-L/16 patch grid for the rectangular front-camera input.
+    tubelet_size_enc: 1
+    use_activation_checkpointing: false
+    unfreeze_encoder: false
+    action_conditioning: token # we are using AdaLN here, which actually not conducting action conditioning using 'token'. just set it to 'token' for VideoWM so that it's not duplicated across all spatial locations, which is the action condition method of 'feature'
+    proprio_encoding: none # no proprio encoding in this experiment
+    num_frames_pred: 4 # used to set self.num_pred
+    
+    visual_encoder:
+      enc_type: dino
+      enc_version: dinov3_vitl16
+      pretrain_enc_path: null
+      pretrain_enc_ckpt_key: null
+      embed_dim: 1024
+      enc_use_rope: null
+      enc_name: null
+      use_sdpa_enc: null
+      num_frames_enc: null
+      uniform_power: true
+
+    action_encoder:
+      action_tokens: 1 # same as action_conditioning, placeholder
+      action_emb_dim: 0 # as we use AdaLN, no need extra mlp, so set it to 0
+      act_mlp: false # as we use AdaLN, no need extra mlp
+      action_encoder_inpred: true # we use AdaLN, so action encoding inside predictor
+      
+    proprio_encoder: # no proprio encoding in this experiment
+      proprio_tokens: 0
+      proprio_emb_dim: 0
+      prop_mlp: false
+      proprio_encoder_inpred: false
+      
+    predictor:
+      tubelet_size: 1
+      pred_num_heads: 16
+      pred_depth: 12
+      pred_embed_dim: 1024
+      pred_use_extrinsics: false
+      pred_type: AdaLN
+      use_SiLU: null
+      use_rope: true
+      
+    wm_encoding: # These settings in the wm_encoding block control how the visual encoder processes the temporal sequence of images
+      batchify_video: true # What it does: It tells the model to treat the video as a batch of independent images, as we use DINOv3 to encode each frame
+      dup_image: false # no duplicatation of eac frame
+      normalize_reps: false # no layernorm after encoder, as DINOv3 already has a layernorm at the end of the encoder
+      
+    rollout_cfg: # todo: not actually used during JEPA-WM agent for navsim
+      rollout_steps: 2
+      train_rollout_prefixes: random
+      rollout_stop_gradient: true
+      ctxt_window_train_rollout: 4
+      do_parallel_rollout: null
+      do_sequential_rollout: true
+      prepend_gt: null
+      sampling_scheduler:
+        type: linear
+        start: 0.0
+        end: 0.0
+        
+    attn:
+      local_window_time: 3 # Enables frame-causal attention over all available history.
+      local_window_h: -1 # gloabl attention across height
+      local_window_w: -1 # global attention across width
+      
+    heads_cfg: # settings for decoders. no decoder here
+      architectures: {}
+      pretrain_dec_path: null
+      
+  optimization: # todo: need to update with training/default_training.yaml
+    transition_model:
+      iterations_per_epoch: 300
+      ipe_scale: 1.0
+      clip_grad: 1
+      use_radamw: false
+      betas: [0.9, 0.995]
+      eps: 1.0e-08
+      weight_decay: 1.0e-07
+      final_weight_decay: 1.0e-06
+      num_epochs: 315
+      warmup: 0
+      start_lr: 0.0005
+      ref_lr: 0.0005
+      final_lr: 0.0005
+      mixed_precision: true
+
+checkpoint_path: null 
+lr: 1e-4 # todo: need to update with training/default_training.yaml
+encoder_lr: null

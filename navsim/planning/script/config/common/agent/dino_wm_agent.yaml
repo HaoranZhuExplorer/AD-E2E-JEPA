@@ -1,0 +1,23 @@
+_target_: navsim.agents.dino_wm.dino_wm_agent.DINO_WMAgent
+_convert_: 'all'
+
+trajectory_sampling:
+    _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+    _convert_: 'all'
+    time_horizon: 4
+    interval_length: 0.5
+config:
+  _target_: navsim.agents.dino_wm.dino_wm_config.DINO_WMConfig
+  _convert_: 'all'
+  encoder_type: vit-l
+  predictor_size: large
+  predictor_depth: 12 # large: width 1024, 16 heads, MLP width 4096, as in JEPA-WM
+  img_size: [256, 512] # Cache geometry; DINOv3 gives 16x32 patches, as in JEPA-WM.
+  action_embed_dim: 10 # DINO-WM concatenates encoded actions to each visual patch.
+  optimization:
+    transition_model:
+      weight_decay: 1.0e-7
+      betas: [0.9, 0.995]
+      eps: 1.0e-8
+checkpoint_path: null
+lr: 1e-4

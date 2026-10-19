@@ -1,0 +1,33 @@
+_target_: navsim.agents.le_wm.le_wm_agent.LE_WM_Agent
+_convert_: 'all'
+
+trajectory_sampling:
+    _target_: nuplan.planning.simulation.trajectory.trajectory_sampling.TrajectorySampling
+    _convert_: 'all'
+    time_horizon: 4
+    interval_length: 0.5
+config:
+  _target_: navsim.agents.le_wm.le_wm_config.LE_WMConfig
+  _convert_: 'all'
+
+  model:
+    encoder_scale: vit-l # Native DINOv3 S/B/L/16; always initialized with pretrained=False.
+    patch_size: 16
+    image_size: [256, 512]
+    history_size: 4
+    num_preds: 1
+    embed_dim: 1024
+
+    predictor_depth: 12
+    predictor_heads: 16
+    predictor_mlp_dim: 4096
+    predictor_dim_head: 64
+    predictor_dropout: 0.1
+    predictor_emb_dropout: 0.0
+
+    sigreg_weight: 0.09
+    sigreg_knots: 17
+    sigreg_num_proj: 1024
+
+checkpoint_path: null
+lr: 1e-4
