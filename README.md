@@ -24,7 +24,7 @@
 **Timeline:**
 - [x] Paper released on 09/28/2026
 - [x] Main source code released by 10/19/2026
-- [ ] Collect and upload model weights to Hugging Face by 10/20/2026
+- [ ] Collect and upload model weights to Hugging Face by 10/23/2026 (A bit busy these days, so pushing this back by 3 days. Sorry for the delay!)
 - [ ] Review community feedback, fix bugs if needed, and refactor the codebase by 11/19/2026
 
 ## 0) Execution Environment
