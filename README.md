@@ -4,6 +4,11 @@
 
 <div align="center" style="line-height: 1;">
   <a href="https://arxiv.org/abs/2609.34085" target="_blank" style="margin: 2px;"><img alt="ArXiv" src="https://img.shields.io/badge/arXiv-2609.34085-b5212f?logo=arxiv" style="display: inline-block; vertical-align: middle;"/></a>
+  <a href="https://huggingface.co/HaoranZhu/AD-E2E-JEPA" target="_blank" style="margin: 2px;">
+  <img alt="HuggingFace Models"
+       src="https://img.shields.io/badge/🤗%20Models-HaoranZhu%2FAD--E2E--JEPA-ffc107"
+       style="display: inline-block; vertical-align: middle;"/>
+  </a>
 </div>
 
 <br>
@@ -24,7 +29,7 @@
 **Timeline:**
 - [x] Paper released on 09/28/2026
 - [x] Main source code released by 10/19/2026
-- [ ] Collect and upload model weights to Hugging Face by 10/23/2026 (A bit busy these days, so pushing this back by 3 days. Sorry for the delay!)
+- [x] Collect and upload model weights to Hugging Face by 10/23/2026
 - [ ] Review community feedback, fix bugs if needed, and refactor the codebase by 11/19/2026
 
 ## 0) Execution Environment
@@ -53,7 +58,11 @@ See the [Downstream Imitation Learning Guide](docs/TRAIN_DOWNSTREAM.md).
 
 See the [Downstream Imitation Learning Evaluation Guide](docs/DT_EVAL.md).
 
-## 6) Citation
+## 6) Pre-trained Checkpoints
+
+Pre-trained checkpoints for the experiments above are available at [Hugging Face](https://huggingface.co/HaoranZhu/AD-E2E-JEPA).
+
+## 7) Citation
 
 ```bibtex
 @article{zhu2026ad,
